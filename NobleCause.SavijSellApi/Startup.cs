@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NobleCause.SavijSellApi.Repositories;
+using NobleCause.SavijSellApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,9 @@ namespace NobleCause.SavijSellApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NobleCause.SavijSellApi", Version = "v1" });
             });
+
+            services.AddSingleton<IProductsService, ProductsService>();
+            services.AddSingleton<IProductsRepository, ProductsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
