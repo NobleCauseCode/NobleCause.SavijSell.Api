@@ -20,5 +20,13 @@ namespace NobleCause.SavijSellApi.Controllers
             var products = _productsService.GetProducts();
             return Ok(products);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetProduct(string id)
+        {
+            var product = _productsService.GetProduct(id);
+            return Ok(product);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace NobleCause.SavijSellApi.Services
 {
     public interface IProductsService
     {
-        public List<Product> GetProducts();
+        List<Product> GetProducts();
+        Product GetProduct(string id);
     }
 }

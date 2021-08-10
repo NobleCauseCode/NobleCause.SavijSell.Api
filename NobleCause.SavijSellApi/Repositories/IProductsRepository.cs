@@ -8,6 +8,7 @@ namespace NobleCause.SavijSellApi.Repositories
 {
     public interface IProductsRepository
     {
-        public List<Product> GetProducts();
+        List<Product> GetProducts();
+        Product GetProduct(string id);
     }
 }

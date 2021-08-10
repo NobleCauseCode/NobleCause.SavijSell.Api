@@ -13,6 +13,11 @@ namespace NobleCause.SavijSellApi.Services
             _productsRepository = productsRepository;
         }
 
+        public Product GetProduct(string id)
+        {
+            return _productsRepository.GetProduct(id);
+        }
+
         public List<Product> GetProducts()
         {
             return _productsRepository.GetProducts();
