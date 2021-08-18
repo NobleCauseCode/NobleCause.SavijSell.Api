@@ -1,0 +1,46 @@
+SignUp
+	Fields:
+		First Name
+		Last Name
+		Email
+		Password
+		Postal Code
+		UserName
+		Picture
+
+	(re)-Send Confirmation Email
+	
+Login
+	- Email & Password
+	
+	Not Confirmed
+	Forgot Password
+
+Reset Password
+	Independent of confirmation
+	
+User Home
+	Profile
+		Picture
+		Location
+		Joined Date
+		Items Purchased
+		Items Sold
+		
+	Items For Sale List
+		Items For Sale Details
+	
+	Add New Item For Sale
+		Add Tags Support
+	Items For Sale Edit
+	Remove Item For Sale
+
+
+Search Box
+	Search Results
+	
+Stretch Goals
+	Geo Radius Searching
+	i18n (internationalization)
+	
+	

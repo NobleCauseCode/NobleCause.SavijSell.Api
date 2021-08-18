@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NobleCause.SavijSellApi", "NobleCause.SavijSellApi\NobleCause.SavijSellApi.csproj", "{A58B7057-B230-4FBD-94D7-1D52629FA281}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NobleCause.SavijSellApi", "NobleCause.SavijSellApi\NobleCause.SavijSellApi.csproj", "{A58B7057-B230-4FBD-94D7-1D52629FA281}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{21C4ADF1-5CAD-4D04-B03E-4E29589A8051}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Features List.txt = Documentation\Features List.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
