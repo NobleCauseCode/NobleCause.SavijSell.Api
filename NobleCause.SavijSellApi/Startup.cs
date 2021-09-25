@@ -37,6 +37,8 @@ namespace NobleCause.SavijSellApi
 
             services.AddSingleton<IProductsService, ProductsService>();
             services.AddSingleton<IProductsRepository, ProductsRepository>();
+            services.AddSingleton<IUsersService, UsersService>();
+            services.AddSingleton<IUsersRepository, UsersRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
