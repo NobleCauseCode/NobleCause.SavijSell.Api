@@ -6,5 +6,6 @@ namespace NobleCause.SavijSellApi.Services
     public interface IUsersService
     {
         Task InsertUserAsync(UserSignUp user);
+        Task<string> LoginUserAsync(UserLogin login);
     }
 }
