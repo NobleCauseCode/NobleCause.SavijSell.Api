@@ -1,4 +1,5 @@
 ﻿using NobleCause.SavijSellApi.Models.Api;
+using NobleCause.SavijSellApi.Models.Domain;
 using System.Threading.Tasks;
 
 namespace NobleCause.SavijSellApi.Services
@@ -6,6 +7,6 @@ namespace NobleCause.SavijSellApi.Services
     public interface IUsersService
     {
         Task InsertUserAsync(UserSignUp user);
-        Task<string> LoginUserAsync(UserLogin login);
+        Task<User> LoginUserAsync(TokenRequest login);
     }
 }

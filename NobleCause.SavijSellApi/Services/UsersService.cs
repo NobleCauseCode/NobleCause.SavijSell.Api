@@ -1,11 +1,13 @@
 ﻿using NobleCause.SavijSellApi.Models.Api;
+using NobleCause.SavijSellApi.Models.Domain;
 using NobleCause.SavijSellApi.Repositories;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 
 namespace NobleCause.SavijSellApi.Services
 {
-    public class UsersService: IUsersService
+    public class UsersService : IUsersService
     {
         private readonly IUsersRepository _usersRespository;
 
@@ -20,22 +22,23 @@ namespace NobleCause.SavijSellApi.Services
             await _usersRespository.InsertUserAsync(user);
         }
 
-        public async Task<string> LoginUserAsync(UserLogin login)
+        public async Task<User> LoginUserAsync(TokenRequest login)
         {
-            // try to get a user from the repo (db)
             var user = await _usersRespository.GetUserByEmailAsync(login.Email);
-            // if I get one, check the password
-            if(user == null)
+
+            if (user == null)
             {
-                return string.Empty;
+                throw new AuthenticationException();
             }
+
             var isValid = Crypto.VerifyHashedPassword(user.Password, login.Password);
-            // if the password is good, get a token
-            if(isValid)
+
+            if (!isValid)
             {
-                // get a token
+                throw new AuthenticationException();
             }
-            return string.Empty;
+
+            return user;
         }
     }
 }

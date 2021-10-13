@@ -22,13 +22,5 @@ namespace NobleCause.SavijSellApi.Controllers
             await _usersService.InsertUserAsync(user);
             return NoContent();
         }
-
-        [HttpPost]
-        [Route("/api/token")]
-        public async Task<IActionResult> Token(UserLogin login)
-        {
-          var token = await _usersService.LoginUserAsync(login);
-            return Ok();
-        }
     }
 }
