@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NobleCause.SavijSellApi.Models.Api;
 using NobleCause.SavijSellApi.Services;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace NobleCause.SavijSellApi.Controllers
 
         [HttpPost]
         [Route("/api/token")]
+        [AllowAnonymous]
         public async Task<IActionResult> RequestToken(TokenRequest tokenRequest)
         {
             var token = await _authenticationService.RequestTokenAsync(tokenRequest);

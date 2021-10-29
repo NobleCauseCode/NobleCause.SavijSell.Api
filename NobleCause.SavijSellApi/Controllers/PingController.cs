@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NobleCause.SavijSellApi.Models;
 
 namespace NobleCause.SavijSellApi.Controllers
@@ -12,6 +13,14 @@ namespace NobleCause.SavijSellApi.Controllers
         public IActionResult Get()
         {
             return Ok(new { Response = "Pong" });
+        }
+
+        [HttpGet]
+        [Route("/protectedping")]
+        [Authorize]
+        public IActionResult GetProtectedPing()
+        {
+            return Ok(new { Response = "Protected Pong" });
         }
     }
 }

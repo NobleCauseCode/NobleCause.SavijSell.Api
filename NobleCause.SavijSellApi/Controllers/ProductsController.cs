@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NobleCause.SavijSellApi.Services;
+using System.Threading.Tasks;
 
 namespace NobleCause.SavijSellApi.Controllers
 {
@@ -15,17 +17,18 @@ namespace NobleCause.SavijSellApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Authorize]
+        public async Task<IActionResult> Get()
         {           
-            var products = _productsService.GetProducts();
+            var products = await _productsService.GetProducts();
             return Ok(products);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult GetProduct(string id)
+        public async Task<IActionResult> GetProduct(string id)
         {
-            var product = _productsService.GetProduct(id);
+            var product = await _productsService.GetProduct(id);
             return Ok(product);
         }
     }

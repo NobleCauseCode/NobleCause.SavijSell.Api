@@ -1,6 +1,7 @@
 ﻿using NobleCause.SavijSellApi.Models.Api;
 using NobleCause.SavijSellApi.Repositories;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NobleCause.SavijSellApi.Services
 {
@@ -13,14 +14,14 @@ namespace NobleCause.SavijSellApi.Services
             _productsRepository = productsRepository;
         }
 
-        public Product GetProduct(string id)
+        public async Task<Product> GetProduct(string id)
         {
-            return _productsRepository.GetProduct(id);
+            return await _productsRepository.GetProduct(id);
         }
 
-        public List<Product> GetProducts()
+        public async Task<List<Product>> GetProducts()
         {
-            return _productsRepository.GetProducts();
+            return await _productsRepository.GetProducts();
         }
     }
 }
