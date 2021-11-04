@@ -26,6 +26,7 @@ namespace NobleCause.SavijSellApi.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetProduct(string id)
         {
             var product = await _productsService.GetProduct(id);
