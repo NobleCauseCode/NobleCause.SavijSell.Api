@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NobleCause.SavijSellApi.Repositories;
 using NobleCause.SavijSellApi.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NobleCause.SavijSellApi
 {
@@ -23,6 +16,7 @@ namespace NobleCause.SavijSellApi
     {
         // ToDo: REMOVE THIS KEY!! FOR TUTORIAL PURPOSES ONLY!!!!!
         private const string JwtSigningKey = "iub1i5Np0EP0YC1EFqIEsOwrIkOAmzpj9XWPaaI+Qkw=";
+        private const string AllowedOrigins = "_allowedOrigins";
 
         public Startup(IConfiguration configuration)
         {
@@ -34,6 +28,16 @@ namespace NobleCause.SavijSellApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowedOrigins, policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000");
+                    policy.AllowAnyHeader();
+                });
+
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -66,6 +70,7 @@ namespace NobleCause.SavijSellApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(AllowedOrigins);
             app.UseAuthentication();
 
             if (env.IsDevelopment())
