@@ -6,16 +6,25 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Linq;
+using NobleCause.SavijSellApi.Models;
+using Microsoft.Extensions.Options;
 
 namespace NobleCause.SavijSellApi.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
+        private readonly DatabaseSettings _databaseSettings;
+
+        public UsersRepository(IOptions<DatabaseSettings> databaseSettings)
+        {
+            _databaseSettings = databaseSettings.Value;
+        }
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
             try
             {
-                using (var connection = new SqlConnection("server=localhost;database=savijsell;trusted_connection=true"))
+                using (var connection = new SqlConnection(_databaseSettings.ConnectionString))
                 {
                     var parameters = new DynamicParameters();       
                     parameters.Add("@Email", email);
@@ -41,7 +50,7 @@ namespace NobleCause.SavijSellApi.Repositories
         {
             try
             {
-                using (var connection = new SqlConnection("server=localhost;database=savijsell;trusted_connection=true"))
+                using (var connection = new SqlConnection(_databaseSettings.ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("@FirstName", user.FirstName);

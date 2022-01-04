@@ -7,11 +7,20 @@ using Dapper;
 using System.Data;
 using NobleCause.SavijSellApi.Models.Domain;
 using System.Threading.Tasks;
+using NobleCause.SavijSellApi.Models;
+using Microsoft.Extensions.Options;
 
 namespace NobleCause.SavijSellApi.Repositories
 {
     public class ProductsRepository : IProductsRepository
     {
+        private readonly DatabaseSettings _databaseSettings;
+
+        public ProductsRepository(IOptions<DatabaseSettings> databaseSettings)
+        {
+            _databaseSettings = databaseSettings.Value;
+        }
+
         public async Task<Product> GetProduct(string id)
         {
             var idNumber = Convert.ToInt32(id);
@@ -24,7 +33,7 @@ namespace NobleCause.SavijSellApi.Repositories
         {
             try
             {
-                using (var connection = new SqlConnection("server=localhost;database=savijsell;trusted_connection=true"))
+                using (var connection = new SqlConnection(_databaseSettings.ConnectionString))
                 {
                     var results = await connection.QueryAsync<Product>("stp_Items_Get",
                              null, commandType: CommandType.StoredProcedure);

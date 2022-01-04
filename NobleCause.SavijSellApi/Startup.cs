@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NobleCause.SavijSellApi.Models;
 using NobleCause.SavijSellApi.Repositories;
 using NobleCause.SavijSellApi.Services;
 using System.Text;
@@ -15,7 +16,7 @@ namespace NobleCause.SavijSellApi
     public class Startup
     {
         // ToDo: REMOVE THIS KEY!! FOR TUTORIAL PURPOSES ONLY!!!!!
-        private const string JwtSigningKey = "iub1i5Np0EP0YC1EFqIEsOwrIkOAmzpj9XWPaaI+Qkw=";
+        // private const string JwtSigningKey = "iub1i5Np0EP0YC1EFqIEsOwrIkOAmzpj9XWPaaI+Qkw=";
         private const string AllowedOrigins = "_allowedOrigins";
 
         public Startup(IConfiguration configuration)
@@ -38,6 +39,12 @@ namespace NobleCause.SavijSellApi
 
             });
 
+            var dbSettingsSection = Configuration.GetSection("DatabaseSettings");
+            services.Configure<DatabaseSettings>(dbSettingsSection);
+
+            var cryptoSettingsSection = Configuration.GetSection("CryptoSettings");
+            services.Configure<CryptoSettings>(cryptoSettingsSection);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -50,9 +57,11 @@ namespace NobleCause.SavijSellApi
                         ValidIssuer = "localhost:44328",
                         ValidAudience = "localhost:44328",
                         IssuerSigningKey = new SymmetricSecurityKey(
-                                            Encoding.UTF8.GetBytes(JwtSigningKey))
+                                            Encoding.UTF8.GetBytes(cryptoSettingsSection["JwtSigningKey"]))
                     };
                 });
+
+            
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

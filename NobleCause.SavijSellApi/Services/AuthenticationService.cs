@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using NobleCause.SavijSellApi.Models;
 using NobleCause.SavijSellApi.Models.Api;
 using System;
 using System.Collections.Generic;
@@ -14,12 +16,13 @@ namespace NobleCause.SavijSellApi.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUsersService _usersService;
-        // ToDo: REMOVE THIS KEY!! FOR TUTORIAL PURPOSES ONLY!!!!!
-        private const string JwtSigningKey = "iub1i5Np0EP0YC1EFqIEsOwrIkOAmzpj9XWPaaI+Qkw=";
-
-        public AuthenticationService(IUsersService usersService)
+        private readonly CryptoSettings _cryptoSettings;
+        public AuthenticationService(
+            IUsersService usersService,
+            IOptions<CryptoSettings> cryptoSettings)
         {
             _usersService = usersService;
+            _cryptoSettings = cryptoSettings.Value;
         }
 
         public async Task<TokenResponse> RequestTokenAsync(TokenRequest tokenRequest)
@@ -35,7 +38,7 @@ namespace NobleCause.SavijSellApi.Services
                     new Claim(ClaimTypes.Email, user.Email)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSigningKey));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cryptoSettings.JwtSigningKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken
