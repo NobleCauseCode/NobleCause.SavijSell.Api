@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NobleCause.SavijSellApi.Extensions;
+using NobleCause.SavijSellApi.Middleware;
 using NobleCause.SavijSellApi.Models;
 using NobleCause.SavijSellApi.Repositories;
 using NobleCause.SavijSellApi.Services;
@@ -48,6 +50,9 @@ namespace NobleCause.SavijSellApi
 
             var cryptoSettingsSection = Configuration.GetSection("CryptoSettings");
             services.Configure<CryptoSettings>(cryptoSettingsSection);
+
+            var adminSettingsSection = Configuration.GetSection("AdminSettings");
+            services.Configure<AdminSettings>(adminSettingsSection);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -118,6 +123,13 @@ namespace NobleCause.SavijSellApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(AllowedOrigins);
+            app.UseApiKey();
+
+            //if(AllowedOrigins.IsNullOrWhiteSpace())
+            //{
+
+            //}
+
             app.UseAuthentication();
 
             if (env.IsDevelopment())
