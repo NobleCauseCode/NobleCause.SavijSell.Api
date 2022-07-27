@@ -1,7 +1,12 @@
-﻿using NobleCause.SavijSellApi.Helpers;
+﻿using FluentEmail.Core;
+using FluentEmail.Mailgun;
+using Microsoft.Extensions.Options;
+using NobleCause.SavijSellApi.Helpers;
+using NobleCause.SavijSellApi.Models;
 using NobleCause.SavijSellApi.Models.Api;
 using NobleCause.SavijSellApi.Models.Domain;
 using NobleCause.SavijSellApi.Repositories;
+using System;
 using System.Security.Authentication;
 using System.Threading.Tasks;
 
@@ -11,16 +16,41 @@ namespace NobleCause.SavijSellApi.Services
     public class UsersService : IUsersService
     {
         private readonly IUsersRepository _usersRespository;
-
-        public UsersService(IUsersRepository usersRespository)
+        private readonly MailGunSettings _mailGunSettings;
+        public UsersService(IUsersRepository usersRespository,
+                            IOptions<MailGunSettings> mailGunSettings)
         {
             _usersRespository = usersRespository;
+            _mailGunSettings = mailGunSettings.Value;
         }
 
         public async Task InsertUserAsync(UserSignUp user)
         {
             user.Password = Crypto.HashPassword(user.Password);
-            await _usersRespository.InsertUserAsync(user);
+            var userId = await _usersRespository.InsertUserAsync(user);
+            // create a validationdata
+            var verificationData = Guid.NewGuid();
+            // update the database with validationdata
+            await _usersRespository.UpdateUserValidationData(userId, verificationData);
+            // send email with link to a page that accepts the valdata
+            await SendEmail(verificationData.ToString());
+        }
+
+        private async Task SendEmail(string verficationData)
+        {
+            var sender = new MailgunSender(
+                "sandbox655770c03c374ad8a92dbe3519b714fe.mailgun.org", // Mailgun Domain
+                _mailGunSettings.ApiKey // Mailgun API Key
+
+            );
+            Email.DefaultSender = sender;
+            var email = Email
+                        .From("verification@savijsell.com")
+                        .To("cartmansavij@sharklasers.com")
+                        .Subject("Please click the link")
+                        .Body($"<a href=\"https://localhost:44350/verifyemail/{verficationData}\">Click to verify</a>");
+
+            var response = await email.SendAsync();
         }
 
         public async Task<User> LoginUserAsync(TokenRequest login)
@@ -40,6 +70,11 @@ namespace NobleCause.SavijSellApi.Services
             }
 
             return user;
+        }
+
+        public async Task<int> GetUserIdByVerification(string verificationData)
+        {
+            return await _usersRespository.GetUserIdByVerification(verificationData);
         }
     }
 }
