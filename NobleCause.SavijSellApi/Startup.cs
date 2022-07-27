@@ -54,6 +54,9 @@ namespace NobleCause.SavijSellApi
             var adminSettingsSection = Configuration.GetSection("AdminSettings");
             services.Configure<AdminSettings>(adminSettingsSection);
 
+            var mailgunSettingsSection = Configuration.GetSection("MailGunSettings");
+            services.Configure<MailGunSettings>(mailgunSettingsSection);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
