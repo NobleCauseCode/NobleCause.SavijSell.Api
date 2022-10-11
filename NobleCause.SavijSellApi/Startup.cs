@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NobleCause.SavijSellApi.Data;
 using NobleCause.SavijSellApi.Models;
 using NobleCause.SavijSellApi.Repositories;
 using NobleCause.SavijSellApi.Services;
@@ -61,7 +62,8 @@ namespace NobleCause.SavijSellApi
                         ValidIssuer = "localhost:44328",
                         ValidAudience = "localhost:44328",
                         IssuerSigningKey = new SymmetricSecurityKey(
-                                            Encoding.UTF8.GetBytes(cryptoSettingsSection["JwtSigningKey"]))
+                                            Encoding.UTF8.GetBytes(cryptoSettingsSection["JwtSigningKey"])),
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 
@@ -93,6 +95,7 @@ namespace NobleCause.SavijSellApi
             services.AddSingleton<IUsersService, UsersService>();
             services.AddSingleton<IUsersRepository, UsersRepository>();
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
+            services.AddSingleton<ITokenStore, TokenStore>();
         }
 
         private void SetupLoggly(LogglySettings logglySettings)

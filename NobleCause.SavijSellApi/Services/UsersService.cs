@@ -1,4 +1,5 @@
-﻿using NobleCause.SavijSellApi.Helpers;
+﻿using NobleCause.SavijSellApi.Data;
+using NobleCause.SavijSellApi.Helpers;
 using NobleCause.SavijSellApi.Models.Api;
 using NobleCause.SavijSellApi.Models.Domain;
 using NobleCause.SavijSellApi.Repositories;
@@ -11,10 +12,11 @@ namespace NobleCause.SavijSellApi.Services
     public class UsersService : IUsersService
     {
         private readonly IUsersRepository _usersRespository;
-
-        public UsersService(IUsersRepository usersRespository)
+        private readonly ITokenStore _tokenStore;
+        public UsersService(IUsersRepository usersRespository, ITokenStore tokenStore)
         {
             _usersRespository = usersRespository;
+            _tokenStore = tokenStore;
         }
 
         public async Task InsertUserAsync(UserSignUp user)
@@ -41,5 +43,21 @@ namespace NobleCause.SavijSellApi.Services
 
             return user;
         }
+
+        public async Task<User> GetUserFromRefreshTokenAsync(string email, string refreshToken)
+        {
+            var user = await _usersRespository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                throw new AuthenticationException();
+            }
+            if(_tokenStore.GetToken(email,refreshToken) != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
     }
 }

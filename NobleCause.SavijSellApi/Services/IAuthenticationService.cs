@@ -6,5 +6,6 @@ namespace NobleCause.SavijSellApi.Services
     public interface IAuthenticationService
     {
         Task<TokenResponse> RequestTokenAsync(TokenRequest tokenRequest);
+        Task<TokenResponse> RefreshTokenAsync(RefreshTokenRequest refreshTokenRequest);
     }
 }

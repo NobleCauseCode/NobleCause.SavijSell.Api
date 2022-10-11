@@ -8,5 +8,6 @@ namespace NobleCause.SavijSellApi.Services
     {
         Task InsertUserAsync(UserSignUp user);
         Task<User> LoginUserAsync(TokenRequest login);
+        Task<User> GetUserFromRefreshTokenAsync(string email, string refreshToken);
     }
 }

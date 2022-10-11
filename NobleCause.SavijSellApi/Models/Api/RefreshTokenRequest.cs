@@ -1,8 +1,8 @@
 ﻿namespace NobleCause.SavijSellApi.Models.Api
 {
-    public class TokenResponse
+    public class RefreshTokenRequest
     {
-        public string Token { get; set; }
+        public string Email { get; set; }
         public string RefreshToken { get; set; }
     }
 }
