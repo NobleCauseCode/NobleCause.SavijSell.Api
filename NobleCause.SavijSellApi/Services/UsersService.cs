@@ -19,7 +19,7 @@ namespace NobleCause.SavijSellApi.Services
         private readonly IUsersRepository _usersRespository;
         private readonly MailGunSettings _mailGunSettings;
         private readonly ITokenStore _tokenStore;
-        public UsersService(IUsersRepository usersRespository, ITokenStore tokenStore
+        public UsersService(IUsersRepository usersRespository, ITokenStore tokenStore,
                             IOptions<MailGunSettings> mailGunSettings)
         {
             _usersRespository = usersRespository;
