@@ -24,5 +24,15 @@ namespace NobleCause.SavijSellApi.Controllers
             var token = await _authenticationService.RequestTokenAsync(tokenRequest);
             return Ok(token);
         }
+
+        [HttpPost]
+        [Route("/api/refreshToken")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshTokenRequest)
+        {
+            var token = await _authenticationService.RefreshTokenAsync(refreshTokenRequest);
+            return Ok(token);
+        }
+
     }
 }

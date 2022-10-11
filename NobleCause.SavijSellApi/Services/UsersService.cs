@@ -1,4 +1,5 @@
-﻿using FluentEmail.Core;
+﻿using NobleCause.SavijSellApi.Data;
+using FluentEmail.Core;
 using FluentEmail.Mailgun;
 using Microsoft.Extensions.Options;
 using NobleCause.SavijSellApi.Helpers;
@@ -17,10 +18,12 @@ namespace NobleCause.SavijSellApi.Services
     {
         private readonly IUsersRepository _usersRespository;
         private readonly MailGunSettings _mailGunSettings;
-        public UsersService(IUsersRepository usersRespository,
+        private readonly ITokenStore _tokenStore;
+        public UsersService(IUsersRepository usersRespository, ITokenStore tokenStore
                             IOptions<MailGunSettings> mailGunSettings)
         {
             _usersRespository = usersRespository;
+            _tokenStore = tokenStore;
             _mailGunSettings = mailGunSettings.Value;
         }
 
@@ -72,6 +75,21 @@ namespace NobleCause.SavijSellApi.Services
             return user;
         }
 
+		public async Task<User> GetUserFromRefreshTokenAsync(string email, string refreshToken)
+        {
+            var user = await _usersRespository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                throw new AuthenticationException();
+            }
+            if(_tokenStore.GetToken(email,refreshToken) != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+        
         public async Task<int> GetUserIdByVerification(string verificationData)
         {
             return await _usersRespository.GetUserIdByVerification(verificationData);
